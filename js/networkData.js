@@ -133,6 +133,10 @@ function clearListeners() {
 }
 
 function finalizeGraph() {
+    if(allEdges.length == 0) {
+        Swal.fire("Input Network must have at least one edge");
+        return; 
+    }
     console.log(allNodes);
     console.log(allEdges);
     inputGraph = generateInputGraph();
@@ -217,6 +221,10 @@ function finalizeGraph() {
             s = +source_id;
             t = +sink_id;
             var maxflow = edmonds_karp(inputGraph, s, t);
+            if(algoStates.length == 1) {
+                document.getElementById("finalStateMessage").style.visibility = "visible";
+                return;
+            }
             console.log(maxflow);
             console.log(algoStates);
             document.getElementsByClassName("cy2buttons")[0].style.visibility = "visible";
@@ -294,8 +302,8 @@ function nextStep() {
         currentStep++;
         algoStageName = "Show Aug Path";
         if(currentStep == algoStates.length) {
-            document.getElementById("finalStepButton").style.visibility = "hidden";
-            document.getElementById("algoStateButton").style.visibility = "hidden";
+            document.getElementsByClassName("cy2buttons")[0].style.visibility = "hidden";
+            document.getElementById("finalStateMessage").style.visibility = "visible";
         }
     }
     document.getElementById('algoStateButton').innerHTML = algoStageName;
@@ -332,7 +340,7 @@ function finalState() {
             }
         }
     }
-
+    document.getElementsByClassName("cy2buttons")[0].style.visibility = "hidden";
 }
 
 function validateSourceAndSink(sourceNode, sinkNode) {
@@ -540,15 +548,13 @@ function resetGraph() {
     source = null, sink = null;
     let elem = document.getElementsByClassName("cy2buttons")[0].style;
     elem.visibility = "hidden";
-    setTimeout(() => {
-        clearListeners();
-        cy1.on("vclick", graphClick);
-        cy1.on("vclick", "node", nodeClick);
-        cy1.on("vclick", "edge", edgeClick);
-        cy1.elements().remove();
-        if (cy2) cy2.elements().remove();
-    }, 10);
-
+    clearListeners();
+    cy1.on("vclick", graphClick);
+    cy1.on("vclick", "node", nodeClick);
+    cy1.on("vclick", "edge", edgeClick);
+    cy1.elements().remove();
+    if (cy2) cy2.elements().remove();
+    document.getElementById("finalStateMessage").style.visibility = "hidden";
 }
 
 document.addEventListener("DOMContentLoaded", function () {
