@@ -2,6 +2,7 @@
 
 var s = null;
 var t = null;
+var algoStageName = "Show Aug Path";
 var allNodes = [];
 var allEdges = [];
 var algoStates = [];
@@ -58,7 +59,7 @@ var cyStyle = [
             'line-color': '#5ebed6',
             'target-arrow-color': '#5ebed6',
             'transition-property': 'background-color, line-color, target-arrow-color',
-            'transition-duration': '2.0s'
+            'transition-duration': '1.0s'
         }
     }
 ]
@@ -250,21 +251,29 @@ function addEdgeToGraph(edge) {
 }
 
 function nextStep() {
-    if (currentStep == algoStates.length) return;
+    if (currentStep == algoStates.length) {
+        return;
+    }
     var current_state = algoStates[currentStep];
     var flows = current_state[0];
     var res = current_state[1];
     var parent_map = current_state[2];
     var prev_res = algoStates[currentStep - 1][1];
     var path = getBfsPath(parent_map);
-    animate(path, 0);
-    for (var i = 0; i < path.length - 1; i++) {
-        let u = path[i];
-        let v = path[i + 1];
-        if (inputGraph[u][v] > 0) updateEdgeLabel(u + "_" + v, flows[u][v] + "/" + inputGraph[u][v]);
-        if (inputGraph[v][u] > 0) updateEdgeLabel(v + "_" + u, flows[v][u] + "/" + inputGraph[v][u]);
+    if(algoStageName == "Show Aug Path") {
+        animate(path, 0);
+        algoStageName = "Update Flows";
     }
-    setTimeout(() => {
+    else if(algoStageName == "Update Flows") { 
+        for (var i = 0; i < path.length - 1; i++) {
+            let u = path[i];
+            let v = path[i + 1];
+            if (inputGraph[u][v] > 0) updateEdgeLabel(u + "_" + v, flows[u][v] + "/" + inputGraph[u][v]);
+            if (inputGraph[v][u] > 0) updateEdgeLabel(v + "_" + u, flows[v][u] + "/" + inputGraph[v][u]);
+        }
+        algoStageName = "Update Residual Graph";
+    }
+    else {
         for (var i = 0; i < path.length - 1; i++) {
             let u = path[i];
             let v = path[i + 1];
@@ -278,12 +287,18 @@ function nextStep() {
             if (prev_res[v][u] > 0) updateEdgeLabel(v + "_" + u, res[v][u], "cy2");
             else {
                 let edge = createEdge(getNode("" + v), getNode("" + u));
+                edge.totalCapacity = "" + res[v][u];
                 addEdgeToGraph(edge);
             }
         }
-    }, 5000);
-
-    currentStep++;
+        currentStep++;
+        algoStageName = "Show Aug Path";
+        if(currentStep == algoStates.length) {
+            document.getElementById("finalStepButton").style.visibility = "hidden";
+            document.getElementById("algoStateButton").style.visibility = "hidden";
+        }
+    }
+    document.getElementById('algoStateButton').innerHTML = algoStageName;
 }
 
 function finalState() {
