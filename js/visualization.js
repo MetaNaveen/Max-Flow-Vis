@@ -3,7 +3,6 @@ function getBfsPath(parent_map) {
     var path = [];
     var v = t;
     console.log(v);
-    debugger;
     while(v != -1) {
         path.push(v);
         v = parent_map.get(v);

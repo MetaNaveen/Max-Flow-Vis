@@ -52,10 +52,9 @@ function init_flows() {
 function edmonds_karp(inputGraph, s, t) {
     var current_flows = init_flows();
     var res = init_residual();
-    algoStates.push([JSON.parse(JSON.stringify(current_flows)), JSON.parse(JSON.stringify(res)),                    new Map()]);
+    algoStates.push([JSON.parse(JSON.stringify(current_flows)), JSON.parse(JSON.stringify(res)), new Map()]);
     var max_flow = 0;
     console.log(res, s, t);
-    debugger;
     var parent_map = bfs(res, s, t);
     while(parent_map.has(t)) {
         var bottleneck = Number.MAX_SAFE_INTEGER;
