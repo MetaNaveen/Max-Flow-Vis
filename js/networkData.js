@@ -256,7 +256,7 @@ function nextStep() {
     var res = current_state[1];
     var parent_map = current_state[2];
     var prev_res = algoStates[currentStep - 1][1];
-    var path = getBfsPath(t, parent_map);
+    var path = getBfsPath(parent_map);
     animate(path, 0);
     for (var i = 0; i < path.length - 1; i++) {
         let u = path[i];

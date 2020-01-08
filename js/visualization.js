@@ -1,5 +1,5 @@
 var augPaths = [];
-function getBfsPath(t, parent_map) {
+function getBfsPath(parent_map) {
     var path = [];
     var v = t;
     while (v != -1) {
