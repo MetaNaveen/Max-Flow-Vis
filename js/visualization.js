@@ -1,9 +1,8 @@
 var augPaths = [];
-function getBfsPath(parent_map) {
+function getBfsPath(t, parent_map) {
     var path = [];
     var v = t;
-    console.log(v);
-    while(v != -1) {
+    while (v != -1) {
         path.push(v);
         v = parent_map.get(v);
     }
@@ -11,8 +10,8 @@ function getBfsPath(parent_map) {
 }
 
 function animate(path, i) {
-    if(i  == path.length - 1) return;
-    var edge = cy2.edges().getElementById(path[i] + "_" + path[i+1]);
+    if (i == path.length - 1) return;
+    var edge = cy2.edges().getElementById(path[i] + "_" + path[i + 1]);
     console.log(edge);
     edge.addClass('highlighted');
     setTimeout(() => { animate(path, i + 1) }, 1000);
@@ -24,7 +23,7 @@ function animate_path(path) {
     for(var i = 0; i < path.length - 1; i++) {
         var edge = cy2.edges().getElementById("#" + path[i] + "_" + path[i+1]);
         edge.addClass('highlighted');
-        setTimeout({}, 1000);   
+        setTimeout({}, 1000);
     }
 }
 */

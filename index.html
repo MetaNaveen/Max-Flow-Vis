@@ -6,7 +6,11 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Cytoscape</title>
         <!-- A minified UMD build with all dependencies included in the bundle. This file is useful for small pages, supplementary material for an academic paper for example. -->
-    
+        
+        <!-- sweet alert -->
+        <!-- https://sweetalert2.github.io/#examples -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        
         <script src="js/cytoscape/cytoscape.min.js"></script>
         <script src="js/Classes.js"></script>
         <script src="js/test.js"></script>
@@ -19,11 +23,13 @@
         <div class = "workspace">
             <div id="cy1"></div>
             <div id="cy2">
-                <button onclick="nextStep()" class="nextstepstyle">Next</button>
-                <button onclick="finalState()" class="finalstepstyle">Final State</button>
             </div>
             <button onclick="finalizeGraph()" class="finalizestyle">Finalize Graph</button>
             <button onclick="resetGraph()" class="resetstyle">Reset Graph</button>
+            <div class="cy2buttons">
+                <button onclick="nextStep()" class="nextstepstyle">Next</button>
+                <button onclick="finalState()" class="finalstepstyle">Final State</button>
+            </div>
         </div>
     </body>
 </html>

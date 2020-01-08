@@ -28,15 +28,6 @@ body {
     padding: 15px 32px;
 }
 
-.finalstepstyle {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    z-index: 2000;
-    padding: 15px 32px;
-    float: right;
-}
-
 .resetstyle {
     position: absolute;
     left: 8.26%;
@@ -48,11 +39,28 @@ body {
 }
 
 .nextstepstyle {
+    position: absolute;
+    left: 50%;
     background-color: #4CAF50;
     border: none;
     color: white;
     z-index: 2000;
     padding: 15px 32px;
+}
+
+.finalstepstyle {
+    position: absolute;
+    right: 0%;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    z-index: 2000;
+    padding: 15px 32px;
+    float: right;
+}
+
+.cy2buttons {
+    visibility: hidden;
 }
 
 #cy1 {
