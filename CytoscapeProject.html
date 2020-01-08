@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Cytoscape</title>
+        <!-- A minified UMD build with all dependencies included in the bundle. This file is useful for small pages, supplementary material for an academic paper for example. -->
+
+        <!-- <script src="js/alertify/alertify.min.js"></script>
+        <link rel="stylesheet" href="js/alertify/css/alertify.core.css" />
+        <link rel="stylesheet" href="js/alertify/css/alertify.default.css" id="toggleCSS" /> -->
+
+
+        <!-- Codes for alertify -->
+        <!-- <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css"/> -->
+
+    
+        <script src="js/cytoscape/cytoscape.min.js"></script>
+        <script src="js/Classes.js"></script>
+        <script src="js/test.js"></script>
+        <script src="js/visualization.js"></script>
+        <script src="js/algorithm.js"></script>
+        <script src="js/networkData.js"></script>
+        <link rel="stylesheet" href="styles/style.css">
+    </head>
+    <body>       
+        <div class = "workspace">
+            <div id="cy1"></div>
+            <div id="cy2">
+                <button onclick="nextStep()" class="nextstepstyle">Next Step</button>
+                <button onclick="finalState()" class="finalstepstyle">Final State</button>
+            </div>
+            <button onclick="finalizeGraph()" class="finalizestyle">Finalize Graph</button>
+            <button onclick="resetGraph()" class="resetstyle">Reset Graph</button>
+        </div>
+        <!-- Application logic -->
+        <script>
+            
+        </script>
+    </body>
+</html>

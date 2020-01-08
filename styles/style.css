@@ -1,0 +1,82 @@
+body {
+    margin: 0px 0px;
+}
+
+.navbar {
+    position: absolute;
+    height: 30%;
+}
+
+.workspace {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.overcy1 {
+    position: absolute;
+    z-index: 1000;
+}
+
+.finalizestyle {
+    position: absolute;
+    display: inline;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    z-index: 2000;
+    padding: 15px 32px;
+}
+
+.finalstepstyle {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    z-index: 2000;
+    padding: 15px 32px;
+    float: right;
+}
+
+.resetstyle {
+    position: absolute;
+    left: 8.26%;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    z-index: 2000;
+    padding: 15px 32px;
+}
+
+.nextstepstyle {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    z-index: 2000;
+    padding: 15px 32px;
+}
+
+#cy1 {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: lightyellow;
+}
+
+#cy2 {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    background-color: lightgray;
+}
+#custom {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    background-color: lightgray;
+}
