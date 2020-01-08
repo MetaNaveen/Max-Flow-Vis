@@ -310,6 +310,7 @@ function nextStep() {
 }
 
 function finalState() {
+    console.log(document.getElementById("finalStateMessage").style.visibility);
     cy2.edges().remove();
     console.log(cy2.edges());
     var finalState = algoStates[algoStates.length - 1];
@@ -341,6 +342,7 @@ function finalState() {
         }
     }
     document.getElementsByClassName("cy2buttons")[0].style.visibility = "hidden";
+    document.getElementById("finalStateMessage").style.visibility = "visible";
 }
 
 function validateSourceAndSink(sourceNode, sinkNode) {
@@ -553,7 +555,9 @@ function resetGraph() {
     cy1.on("vclick", "node", nodeClick);
     cy1.on("vclick", "edge", edgeClick);
     cy1.elements().remove();
-    if (cy2) cy2.elements().remove();
+    if (cy2) {
+        cy2.nodes().remove();
+    }
     document.getElementById("finalStateMessage").style.visibility = "hidden";
 }
 
@@ -671,7 +675,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //     minZoom: 0.1,
     //     maxZoom: 3,
     // });
-
+    /*
     var testdata = test1();
 
     allNodes = testdata.nodes;
@@ -701,5 +705,5 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         };
         cy1.add(edge);
-    });
+    });*/
 });
