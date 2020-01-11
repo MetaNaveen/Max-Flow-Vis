@@ -64,6 +64,52 @@ var cyStyle = [
     }
 ]
 
+var cyStyle2 = [
+    {
+        selector: 'node',
+        style: {
+            shape: 'ellipse',
+            'background-color': 'red',
+            label: 'data(id)',
+            'border-width': 3,
+            'border-style': 'solid',
+            'border-color': 'lightblue',
+            "text-valign": "center",
+            "text-halign": "center"
+        }
+    },
+    {
+        selector: 'edge',
+        style: {
+            'curve-style': 'bezier',
+            'label': 'data(customLabel)',
+            'text-background-color': 'lightgray',
+            'text-background-opacity': 1,
+            'width': '3px',
+            'target-arrow-shape': 'triangle',
+            'control-point-step-size': '70px'
+        }
+    },
+    {
+        selector: ':selected',
+        style: {
+            'border-width': 3,
+            'border-style': 'solid',
+            'border-color': 'blue'
+        }
+    },
+    {
+        selector: '.highlighted',
+        style: {
+            'background-color': '#5ebed6',
+            'line-color': '#5ebed6',
+            'target-arrow-color': '#5ebed6',
+            'transition-property': 'background-color, line-color, target-arrow-color',
+            'transition-duration': '1.0s'
+        }
+    }
+]
+
 function getNode(id) {
     // console.log(allNodes.length);
     for (var i = 0; i < allNodes.length; i++) {
@@ -184,7 +230,7 @@ function finalizeGraph() {
                 layout: {
                     name: 'preset'
                 },
-                style: cyStyle,
+                style: cyStyle2,
                 wheelSensitivity: 0.5,
                 userZoomingEnabled: true,
                 minZoom: 0.1,
@@ -436,12 +482,6 @@ function nodeClick(event) {
     console.log(edgePoint1, edgePoint2);
     var id = event.target.data().id;
     var elem = cy1.nodes().getElementById(id);
-    // console.log(elem._private.selected);
-    // if (elem._private.selected) {
-    //     elem._private.selected = false;
-    //     console.log("SELECTED");
-    //     return;
-    // }
     console.log(event, elem);
     if (event.target !== elem) return; // return, if the clicked position is not in Node element
     console.log("Node processing...");
@@ -531,6 +571,14 @@ function edgeClick(event) {
             }
         }
     });
+}
+
+function nodeDrag(event) {
+    var node = getNode(event.target.data().id);
+    var newPos = event.target.position();
+    node.position.x = newPos.x;
+    node.position.y = newPos.y;
+    console.log(allNodes);
 }
 
 function resetGraph() {
@@ -629,81 +677,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Click event on Edge element
     cy1.on("vclick", "edge", edgeClick);
 
-    // Cy2
-    // var cy2 = cytoscape({
-    //     container: document.getElementById('cy2'), // container to render in 
-    //     elements: allNodes,
-    //     layout: {
-    //         name: 'preset'
-    //     },
-    //     style: [
-    //         {
-    //             selector: 'node',
-    //             style: {
-    //                 shape: 'ellipse',
-    //                 'background-color': 'red',
-    //                 label: 'data(id)',
-    //                 'border-width': 3,
-    //                 'border-style': 'solid',
-    //                 'border-color': 'lightblue'
+    cy1.on("dragfree", "node", nodeDrag);
 
-    //             }
-    //         },
-    //         {
-    //             selector: 'edge',
-    //             style: {
-    //                 'curve-style': 'bezier',
-    //                 'label': 'data(customLabel)',
-    //                 'text-background-color': 'lightyellow',
-    //                 'text-background-opacity': 1,
-    //                 'width': '6px',
-    //                 'target-arrow-shape': 'triangle',
-    //                 'control-point-step-size': '140px'
-    //             }
-    //         },
-    //         {
-    //             selector: ':selected',
-    //             style: {
-    //               'border-width': 3,
-    //               'border-style': 'solid',
-    //               'border-color': 'blue'
-    //             }
-    //           }
-    //     ],
-    //     wheelSensitivity: 0.5,
-    //     userZoomingEnabled: true,
-    //     minZoom: 0.1,
-    //     maxZoom: 3,
-    // });
-    /*
-    var testdata = test1();
-
-    allNodes = testdata.nodes;
-    allEdges = testdata.edges;
-    allNodes.forEach(e => {
-        var node = {
-            group: "nodes",
-            data: {
-                id: e.id.toString()
-            },
-            position: {
-                x: e.position.x,
-                y: e.position.y
-            }
-        };
-        cy1.add(node);
-    });
-
-    allEdges.forEach(e => {
-        var edge = {
-            group: "edges",
-            data: {
-                id: e.id.toString(),
-                source: e.source,
-                target: e.target,
-                customLabel: "0/" + e.totalCapacity
-            }
-        };
-        cy1.add(edge);
-    });*/
 });
