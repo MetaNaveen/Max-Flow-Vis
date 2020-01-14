@@ -37,7 +37,7 @@ var cyStyle = [
         style: {
             'curve-style': 'bezier',
             'label': 'data(customLabel)',
-            'text-background-color': 'lightyellow',
+            'text-background-color': '#a0c2cc',
             'text-background-opacity': 1,
             'width': '3px',
             'target-arrow-shape': 'triangle',
@@ -195,7 +195,6 @@ function finalizeGraph() {
     console.log(allEdges);
     inputGraph = generateInputGraph();
     console.log(inputGraph);
-    clearListeners();
 
     let source_id = "";
     let sink_id = "";
@@ -232,6 +231,7 @@ function finalizeGraph() {
             return;
         }
         if (result.value) {
+            clearListeners();
             cy2 = cytoscape({
                 container: document.getElementById('cy2'),
                 elements: [],

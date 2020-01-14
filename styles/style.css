@@ -21,31 +21,43 @@ body {
 .finalizestyle {
     position: absolute;
     display: inline;
-    background-color: #4CAF50;
+    background-color: rgb(40, 44, 40);
     border: none;
     color: white;
     z-index: 2000;
     padding: 15px 32px;
+    opacity: 0.6;
+    border-radius: 10px;
+}
+
+.finalizestyle:active{
+    background-color: #292c29;
+    -moz-box-shadow: inset 0px 0px 5px #292c29;
+    box-shadow: inset 0px 0px 5px #292c29;
+    transform: translateY(1.2px);
 }
 
 .resetstyle {
     position: absolute;
     left: 8.26%;
-    background-color: #4CAF50;
+    background-color: rgb(207, 121, 50);
     border: none;
     color: white;
     z-index: 2000;
     padding: 15px 32px;
+    border-radius: 10px;
 }
 
 .nextstepstyle {
     position: absolute;
     left: 50%;
-    background-color: #4CAF50;
+    background-color: rgb(40, 44, 40);
     border: none;
     color: white;
     z-index: 2000;
     padding: 15px 32px;
+    border-radius: 10px;
+    opacity: 0.6;
 }
 
 .finalstepstyle {
@@ -57,6 +69,8 @@ body {
     z-index: 2000;
     padding: 15px 32px;
     float: right;
+    opacity: 0.85;
+    border-radius: 10px;
 }
 
 .cy2buttons {
@@ -69,7 +83,7 @@ body {
     position: absolute;
     top: 0px;
     left: 0px;
-    background-color: lightyellow;
+    background-color: #a0c2cc;
 }
 
 #cy2 {
