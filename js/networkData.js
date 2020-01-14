@@ -186,7 +186,43 @@ function clearListeners() {
     cy1.removeListener("vclick", "edge");
 }
 
+function addOptionsToSelect(selectID, options) {
+    let selElem = document.getElementById(selectID);
+    if (selElem) {
+        for(let i = 0; i < selElem.options.length; i++) {
+            selElem.removeChild(sel.options[i]);
+        }
+        options.forEach(e => {
+            // create new option element
+            let opt = document.createElement('option');
+
+            // create text node to add to option element (opt)
+            opt.appendChild( document.createTextNode(e) );
+
+            // set value property of opt
+            opt.value = e.toString(); 
+
+            // add opt to end of select box (sel)
+            selElem.appendChild(opt);
+        });
+    }
+};
+
+function setModalErrorMsg (modalErrorMsgID, msg) {
+    let elem = document.getElementById(modalErrorMsgID);
+    if (elem) {
+        if (msg) {
+            elem.innerHTML = msg;
+            elem.visibility = "visible";
+        } else {
+            elem.innerHTML = "";
+            elem.visibility = "hidden";
+        }
+    }
+}
+
 function finalizeGraph() {
+
     if(allEdges.length == 0) {
         Swal.fire("Input Network must have at least one edge");
         return; 
@@ -200,90 +236,168 @@ function finalizeGraph() {
     let source_id = "";
     let sink_id = "";
     Swal.fire({
-        title: 'Source and Sink',
-        input: 'text',
-        inputPlaceholder: 'Enter source and sink node IDs',
-        inputValue: "",
-
-        inputValidator: (value) => {
+        title: '<strong>Source and Sink</strong>',
+        icon: 'question',
+        html: `
+            <table style="width:100%;">
+                <tr>
+                    <th>Source ID</th>
+                    <th>Sink ID</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select id="selectedSourceID">
+                        </select>
+                    </td>
+                    <td>
+                        <select id="selectedSinkID">
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <p id="modalErrorMsg"></p>
+        `,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: 'Confirm',
+        confirmButtonAriaLabel: 'Confirm',
+        cancelButtonText: 'Cancel',
+        // cancelButtonAriaLabel: 'Thumbs down',
+        preConfirm: () => {
+            let inputs = [
+                document.getElementById('selectedSourceID').value,
+                document.getElementById('selectedSinkID').value
+            ];
+            console.log(inputs);
             let error = "";
-            let values = value.split(",");
-            if (values.length !== 2) error = "Only two nodes are allowed!"
-            source_id = values[0];
-            sink_id = values[1];
+            source_id = inputs[0];
+            sink_id = inputs[1];
             if (!error && source_id < 0) error = "Source node ID value should be positive";
             if (!error && sink_id < 0) error = "Sink node ID value should be positive";
             if (!error && !getNode(source_id)) error = "Invalid source node ID";
             if (!error && !getNode(sink_id)) error = "Invalid sink node ID";
             if (!error && !validateSourceAndSink(+source_id, +sink_id)) error = "Source/Sink should not have incoming/outgoing routes";
+
             return new Promise((resolve) => {
-                if (error) {
-                    resolve(error);
-                } else {
+                // Validate                
+                if (!error) {
                     resolve();
                 }
+                else {
+                    setModalErrorMsg ("modalErrorMsg", error);
+                    resolve(false);  // Cancels the modal close. Should manually show the error message
+                }
             });
-        },
-        backdrop: true,
-        showCancelButton: true,
-    }).then((result) => {
+          },
+        onOpen: () => {
+            let nodeIDs = allNodes.map(obj => obj.id);
+            addOptionsToSelect("selectedSourceID", nodeIDs);
+            addOptionsToSelect("selectedSinkID", nodeIDs); // should be optimized
+            setModalErrorMsg ("modalErrorMsg", "");
+            // OnChange selection event
+            document.getElementById('selectedSourceID').addEventListener("change", e => {
+                let inputs = [
+                    document.getElementById('selectedSourceID').value,
+                    document.getElementById('selectedSinkID').value
+                ];
+                console.log(inputs);
+            });
+        }
+    }).then(result => {
         console.log(result);
-        if (result.dismiss) {
+        cy2 = cytoscape({
+            container: document.getElementById('cy2'),
+            elements: [],
+            layout: {
+                name: 'preset'
+            },
+            style: cyStyle2,
+            wheelSensitivity: 0.5,
+            userZoomingEnabled: true,
+            minZoom: 0.1,
+            maxZoom: 3,
+        });
+
+        allNodes.forEach(e => {
+            var node = {
+                group: "nodes",
+                data: {
+                    id: e.id.toString()
+                },
+                position: {
+                    x: e.position.x,
+                    y: e.position.y
+                }
+            };
+            cy2.add(node);
+        });
+
+        allEdges.forEach(e => {
+            var edge = {
+                group: "edges",
+                data: {
+                    id: e.id.toString(),
+                    source: e.source,
+                    target: e.target,
+                    customLabel: e.totalCapacity
+                }
+            };
+            cy2.add(edge)
+        });
+
+        s = +source_id;
+        t = +sink_id;
+        var maxflow = edmonds_karp(inputGraph, s, t);
+        if(algoStates.length == 1) {
+            document.getElementById("finalStateMessage").style.visibility = "visible";
             return;
         }
-        if (result.value) {
-            cy2 = cytoscape({
-                container: document.getElementById('cy2'),
-                elements: [],
-                layout: {
-                    name: 'preset'
-                },
-                style: cyStyle2,
-                wheelSensitivity: 0.5,
-                userZoomingEnabled: true,
-                minZoom: 0.1,
-                maxZoom: 3,
-            });
-
-            allNodes.forEach(e => {
-                var node = {
-                    group: "nodes",
-                    data: {
-                        id: e.id.toString()
-                    },
-                    position: {
-                        x: e.position.x,
-                        y: e.position.y
-                    }
-                };
-                cy2.add(node);
-            });
-
-            allEdges.forEach(e => {
-                var edge = {
-                    group: "edges",
-                    data: {
-                        id: e.id.toString(),
-                        source: e.source,
-                        target: e.target,
-                        customLabel: e.totalCapacity
-                    }
-                };
-                cy2.add(edge)
-            });
-
-            s = +source_id;
-            t = +sink_id;
-            var maxflow = edmonds_karp(inputGraph, s, t);
-            if(algoStates.length == 1) {
-                document.getElementById("finalStateMessage").style.visibility = "visible";
-                return;
-            }
-            console.log(maxflow);
-            console.log(algoStates);
-            document.getElementsByClassName("cy2buttons")[0].style.visibility = "visible";
-        }
+        console.log(maxflow);
+        console.log(algoStates);
+        document.getElementsByClassName("cy2buttons")[0].style.visibility = "visible";
+    }, error => {
+        console.log(error);
+    }).catch(error => {
+        console.log(error);
     });
+    // let source_id = "";
+    // let sink_id = "";
+    // Swal.fire({
+    //     title: 'Source and Sink',
+    //     input: 'text',
+    //     inputPlaceholder: 'Enter source and sink node IDs',
+    //     inputValue: "",
+
+    //     inputValidator: (value) => {
+    //         let error = "";
+    //         let values = value.split(",");
+    //         if (values.length !== 2) error = "Only two nodes are allowed!"
+    //         source_id = values[0];
+    //         sink_id = values[1];
+    //         if (!error && source_id < 0) error = "Source node ID value should be positive";
+    //         if (!error && sink_id < 0) error = "Sink node ID value should be positive";
+    //         if (!error && !getNode(source_id)) error = "Invalid source node ID";
+    //         if (!error && !getNode(sink_id)) error = "Invalid sink node ID";
+    //         if (!error && !validateSourceAndSink(+source_id, +sink_id)) error = "Source/Sink should not have incoming/outgoing routes";
+    //         return new Promise((resolve) => {
+    //             if (error) {
+    //                 resolve(error);
+    //             } else {
+    //                 resolve();
+    //             }
+    //         });
+    //     },
+    //     backdrop: true,
+    //     showCancelButton: true,
+    // }).then((result) => {
+    //     console.log(result);
+    //     if (result.dismiss) {
+    //         return;
+    //     }
+    //     if (result.value) {
+    //     }
+    // });
 }
 
 function updateEdgeLabel(edgeId, label, cyObj = "cy1") {
@@ -441,7 +555,7 @@ function graphClick(event) {
     if (isNodeClicked) {
         console.log("Cancelling Cy processing as NODE is clicked");
         isNodeClicked = false;
-        cy1.nodes().getElementById(edgePoint1.id).classes('unhighlight');
+        cy1.nodes().getElementById(edgePoint1.id).removeClass('highlight');
         clearEdgePoints();
         return;
     }
@@ -470,11 +584,12 @@ function nodeClick(event) {
     console.log(edgePoint1, edgePoint2);
     var id = event.target.data().id;
     var elem = cy1.nodes().getElementById(id);
-    elem.classes('highlight');
+    elem.addClass('highlight');
     console.log(event, elem);
     if (event.target !== elem) return; // return, if the clicked position is not in Node element
     console.log("Node processing...");
     isNodeClicked = true;
+    isEdgeClicked = false;
     // Sets first and second node
     if (edgePoint1 == null)  {
         edgePoint1 = getNode(id);
@@ -504,8 +619,8 @@ function nodeClick(event) {
                 cy1.add(edgeData);
                 isNodeClicked = false;
             }
-            cy1.nodes().getElementById(edgePoint1.id).classes('unhighlight');
-            cy1.nodes().getElementById(edgePoint2.id).classes('unhighlight');
+            cy1.nodes().getElementById(edgePoint1.id).removeClass('highlight');
+            cy1.nodes().getElementById(edgePoint2.id).removeClass('highlight');
             clearEdgePoints();
             /*cy1.nodes().forEach(element => {
                 element.unselect();
@@ -524,13 +639,17 @@ function edgeClick(event) {
     // var capacity = getInput("Capacity", 1);
     // swal
     console.log("Edge clicked");
+    console.log(cy1.nodes('.highlight'));
+    cy1.nodes('.highlight').removeClass("highlight");
+    cy1.nodes('.highlight').unselect();
+    edgePoint1 = edgePoint2 = null; // click on node, edge (update label) then again node should not consider the click for edge creation.
     var id = event.target.data().id;
     var elem = cy1.edges().getElementById(id);
     console.log(event, elem);
     if (event.target !== elem) return; // return, if the clicked position is not in Edge element
     console.log("Edge processing...");
     isEdgeClicked = true;
-
+    isNodeClicked = false;
     var e = getEdge(id);
     Swal.fire({
         title: 'Capacity',
@@ -540,7 +659,7 @@ function edgeClick(event) {
 
         inputValidator: (value) => {
             return new Promise((resolve) => {
-                if (!value || value <= 0) {
+                if (!value || value <= 0 || isNaN(value)) {
                     resolve('Please enter positive integer value!');
                 } else {
                     resolve();
@@ -552,6 +671,7 @@ function edgeClick(event) {
     }).then((result) => {
         console.log(result);
         if (result.dismiss) {
+            elem.unselect();
             return;
         }
         if (result.value) {
