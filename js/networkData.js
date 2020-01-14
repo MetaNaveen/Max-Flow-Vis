@@ -45,11 +45,19 @@ var cyStyle = [
         }
     },
     {
-        selector: ':selected',
+        selector: '.highlight',
         style: {
             'border-width': 3,
             'border-style': 'solid',
             'border-color': 'blue'
+        }
+    },
+    {
+        selector: '.unhighlight',
+        style: {
+            'border-width': 3,
+            'border-style': 'solid',
+            'border-color': 'lightblue'
         }
     },
     {
@@ -403,7 +411,6 @@ function validateSourceAndSink(sourceNode, sinkNode) {
 }
 
 function generateInputGraph() {
-    // TODO: Make 2D matrix with 'allNodes' and 'allEdges' data in the format the algorithm requires.
     var N = allNodes.length;
     var graph = new Array(N);
 
@@ -434,6 +441,7 @@ function graphClick(event) {
     if (isNodeClicked) {
         console.log("Cancelling Cy processing as NODE is clicked");
         isNodeClicked = false;
+        cy1.nodes().getElementById(edgePoint1.id).classes('unhighlight');
         clearEdgePoints();
         return;
     }
@@ -454,26 +462,6 @@ function graphClick(event) {
         };
         var n = cy1.add(node1Data);
         console.log(n);
-        // var layout = cy1.layout({
-        //     name: 'grid'
-        // });
-        // layout.run();
-        // console.log(cy1.nodes());
-
-        // cy1.elements().qtip({
-        //     content: function(){ return 'Example qTip on ele ' + this.id() },
-        //     // position: {
-        //     //     my: 'top center',
-        //     //     at: 'bottom center'
-        //     // },
-        //     // style: {
-        //     //     classes: 'qtip-bootstrap',
-        //     //     tip: {
-        //     //         width: 16,
-        //     //         height: 8
-        //     //     }
-        //     // }
-        // });
     }
 }
 
@@ -482,22 +470,25 @@ function nodeClick(event) {
     console.log(edgePoint1, edgePoint2);
     var id = event.target.data().id;
     var elem = cy1.nodes().getElementById(id);
+    elem.classes('highlight');
     console.log(event, elem);
     if (event.target !== elem) return; // return, if the clicked position is not in Node element
     console.log("Node processing...");
     isNodeClicked = true;
     // Sets first and second node
-    if (edgePoint1 == null) edgePoint1 = getNode(id);
+    if (edgePoint1 == null)  {
+        edgePoint1 = getNode(id);
+    }
     else {
         if (edgePoint2 == null) {
             edgePoint2 = getNode(id);
             var newEdge = createEdge(edgePoint1, edgePoint2);
             console.log(newEdge);
-            if (edgePoint1.id === edgePoint2.id) {
+            /*if (edgePoint1.id === edgePoint2.id) {
                 console.log("Edge cannot be created for same nodes.");
                 edgePoint2 = null;
                 return;
-            }
+            }*/
             var capacity = "1"; // getInput("Capacity", 1);
             if (!capacity || capacity === "0" || capacity[0] === "-") capacity = 1;
             if (newEdge) {
@@ -511,17 +502,21 @@ function nodeClick(event) {
                     }
                 };
                 cy1.add(edgeData);
+                isNodeClicked = false;
             }
+            cy1.nodes().getElementById(edgePoint1.id).classes('unhighlight');
+            cy1.nodes().getElementById(edgePoint2.id).classes('unhighlight');
             clearEdgePoints();
-            cy1.nodes().forEach(element => {
+            /*cy1.nodes().forEach(element => {
                 element.unselect();
-            });
+            });*/
         } else {
             // resetting for new edge creation
             edgePoint2 = null;
             edgePoint1 = getNode(id);
         }
     }
+    console.log(cy1.nodes());
     console.log(edgePoint1, edgePoint2);
 }
 
@@ -612,51 +607,6 @@ function resetGraph() {
 document.addEventListener("DOMContentLoaded", function () {
     cy1 = cytoscape({
         container: document.getElementById('cy1'), // container to render in 
-        // elements: [
-        //     // nodes
-        //     { data: { id: 'a' } },
-        //     { data: { id: 'b' } },
-        //     { data: { id: 'c' } },
-        //     { data: { id: 'd' } },
-        //     { data: { id: 'e' } },
-        //     { data: { id: 'f' } },
-        //     // edges
-        //     {
-        //         data: {
-        //             id: 'ab',
-        //             source: 'a',
-        //             target: 'b'
-        //         }
-        //     },
-        //     {
-        //         data: {
-        //             id: 'cd',
-        //             source: 'c',
-        //             target: 'd'
-        //         }
-        //     },
-        //     {
-        //         data: {
-        //             id: 'ef',
-        //             source: 'e',
-        //             target: 'f'
-        //         }
-        //     },
-        //     {
-        //         data: {
-        //             id: 'ac',
-        //             source: 'a',
-        //             target: 'c'
-        //         }
-        //     },
-        //     {
-        //         data: {
-        //             id: 'be',
-        //             source: 'b',
-        //             target: 'e'
-        //         }
-        //     }
-        // ],
         elements: allNodes,
         layout: {
             name: 'preset'
