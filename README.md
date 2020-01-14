@@ -1,3 +1,3 @@
 # Max-Flow-Vis
 
-This is a readme (by Naveen)
+The application is deployed at: https://kameshb96.github.io/Max-Flow-Vis/
