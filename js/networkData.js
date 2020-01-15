@@ -23,11 +23,11 @@ var cyStyle = [
         selector: 'node',
         style: {
             shape: 'ellipse',
-            'background-color': 'red',
+            'background-color': 'gray',
             label: 'data(id)',
             'border-width': 3,
             'border-style': 'solid',
-            'border-color': 'lightblue',
+            'border-color': 'black',
             "text-valign": "center",
             "text-halign": "center"
         }
@@ -77,7 +77,7 @@ var cyStyle2 = [
         selector: 'node',
         style: {
             shape: 'ellipse',
-            'background-color': 'red',
+            'background-color': 'gray',
             label: 'data(id)',
             'border-width': 3,
             'border-style': 'solid',
@@ -104,6 +104,22 @@ var cyStyle2 = [
             'border-width': 3,
             'border-style': 'solid',
             'border-color': 'blue'
+        }
+    },
+    {
+        selector: '.source',
+        style: {
+            'border-width': 3,
+            'border-style': 'solid',
+            'border-color': 'lightgreen'
+        }
+    },
+    {
+        selector: '.sink',
+        style: {
+            'border-width': 3,
+            'border-style': 'solid',
+            'border-color': '#ad1f15'
         }
     },
     {
@@ -303,17 +319,9 @@ function finalizeGraph() {
                 console.log(inputs);
             });
         }
-<<<<<<< HEAD
-        if (result.value) {
-            clearListeners();
-            cy2 = cytoscape({
-                container: document.getElementById('cy2'),
-                elements: [],
-                layout: {
-                    name: 'preset'
-=======
     }).then(result => {
         console.log(result);
+        if(result.dismiss) return;
         cy2 = cytoscape({
             container: document.getElementById('cy2'),
             elements: [],
@@ -332,7 +340,6 @@ function finalizeGraph() {
                 group: "nodes",
                 data: {
                     id: e.id.toString()
->>>>>>> 90b5e6b17dc5ba2ebec8420381eccaccaaaad3e8
                 },
                 position: {
                     x: e.position.x,
@@ -354,7 +361,8 @@ function finalizeGraph() {
             };
             cy2.add(edge)
         });
-
+        cy2.nodes().getElementById(source_id).addClass('source');
+        cy2.nodes().getElementById(sink_id).addClass('sink');
         s = +source_id;
         t = +sink_id;
         var maxflow = edmonds_karp(inputGraph, s, t);

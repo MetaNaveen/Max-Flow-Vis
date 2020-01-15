@@ -21,7 +21,7 @@ body {
 .finalizestyle {
     position: absolute;
     display: inline;
-    background-color: rgb(40, 44, 40);
+    background-color: rgb(44, 40, 40);
     border: none;
     color: white;
     z-index: 2000;
