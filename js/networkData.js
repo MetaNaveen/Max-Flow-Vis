@@ -527,6 +527,12 @@ function finalState() {
         }
     }
     document.getElementsByClassName("cy2buttons")[0].style.visibility = "hidden";
+    Swal.fire({
+        title: "Final Residual Graph",
+        text: "There are no more Augmenting Paths",
+        icon: "success",
+        button: "Finish",
+      });
     document.getElementById("finalStateMessage").style.visibility = "visible";
 }
 
