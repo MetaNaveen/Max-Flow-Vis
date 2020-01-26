@@ -373,6 +373,7 @@ function finalizeGraph() {
         console.log(maxflow);
         console.log(algoStates);
         document.getElementsByClassName("cy2buttons")[0].style.visibility = "visible";
+        clearListeners();
     }, error => {
         console.log(error);
     }).catch(error => {
