@@ -237,8 +237,45 @@ function setModalErrorMsg (modalErrorMsgID, msg) {
     }
 }
 
-function finalizeGraph() {
+function doesSourceAndSinkExist() {
+    var N = allNodes.length;
+    var isValidSink = true;
+    var validSinks = [];
+    var isValidSource = true;
+    var validSources = [];
+    
+    for(var i = 0; i < N; i++) {
+        isValidSink = true;
+        for(var j = 0; j < N; j++) {
+            if(inputGraph[i][j] != 0) {
+                isValidSink = false;
+                break;
+            }
+        }
+        if(isValidSink) {
+            validSinks.push(i);
+        }
+    }
 
+    for(var i = 0; i < N; i++) {
+        isValidSource = true;
+        for(var j = 0; j < N; j++) {
+            if(inputGraph[j][i] != 0) {
+                isValidSource = false;
+                break;
+            }
+        }
+        if(isValidSource) {
+            validSources.push(i);
+        }
+    }
+    if(validSources.length < 1 || validSinks.length < 1) return false;
+    if(validSources.length == 1 && validSinks.length == 1 && validSources[0] == validSinks[0]) return false;
+    return true;
+}
+
+
+function finalizeGraph() {
     if(allEdges.length == 0) {
         Swal.fire("Input Network must have at least one edge");
         return; 
@@ -247,7 +284,11 @@ function finalizeGraph() {
     console.log(allEdges);
     inputGraph = generateInputGraph();
     console.log(inputGraph);
-
+    let error = "";
+    if(!doesSourceAndSinkExist()) {
+        Swal.fire("Network does not have valid source or/and sink! Please clear and create a new network");
+        return;
+    }
     let source_id = "";
     let sink_id = "";
     Swal.fire({
@@ -285,7 +326,6 @@ function finalizeGraph() {
                 document.getElementById('selectedSinkID').value
             ];
             console.log(inputs);
-            let error = "";
             source_id = inputs[0];
             sink_id = inputs[1];
             if (!error && source_id < 0) error = "Source node ID value should be positive";
@@ -293,7 +333,6 @@ function finalizeGraph() {
             if (!error && !getNode(source_id)) error = "Invalid source node ID";
             if (!error && !getNode(sink_id)) error = "Invalid sink node ID";
             if (!error && !validateSourceAndSink(+source_id, +sink_id)) error = "Source/Sink should not have incoming/outgoing routes";
-
             return new Promise((resolve) => {
                 // Validate                
                 if (!error) {

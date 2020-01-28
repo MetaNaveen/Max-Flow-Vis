@@ -21,18 +21,18 @@ body {
 .finalizestyle {
     position: absolute;
     display: inline;
-    background-color: rgb(44, 40, 40);
+    background-color:rgb(29, 167, 29);
     border: none;
     color: white;
     z-index: 2000;
     padding: 15px 32px;
-    opacity: 0.6;
+    opacity: 0.8;
     border-radius: 10px;
 }
 
 .finalizestyle:active{
-    background-color: #292c29;
-    -moz-box-shadow: inset 0px 0px 5px #292c29;
+    background-color: #227e22;
+    -moz-box-shadow: inset 0px 0px 5px rgb(29, 167, 29);
     box-shadow: inset 0px 0px 5px #292c29;
     transform: translateY(1.2px);
 }
@@ -40,12 +40,19 @@ body {
 .resetstyle {
     position: absolute;
     left: 8.26%;
-    background-color: rgb(207, 121, 50);
+    background-color: rgb(207, 50, 50);
     border: none;
     color: white;
     z-index: 2000;
     padding: 15px 32px;
     border-radius: 10px;
+}
+
+.resetstyle:active{
+    background-color: #913b3b;
+    -moz-box-shadow: inset 0px 0px 5px #703e3e;
+    box-shadow: inset 0px 0px 5px #292c29;
+    transform: translateY(1.2px);
 }
 
 .nextstepstyle {
