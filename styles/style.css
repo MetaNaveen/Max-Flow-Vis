@@ -77,13 +77,20 @@ body {
 .nextstepstyle {
     position: absolute;
     left: 50%;
-    background-color: rgb(40, 44, 40);
+    background-color: #282c28;
     border: none;
     color: white;
     z-index: 2000;
     padding: 15px 32px;
     border-radius: 10px;
     opacity: 0.6;
+}
+
+.nextstepstyle:active {
+    background-color: #121412;
+    -moz-box-shadow: inset 0px 0px 5px #121412;
+    box-shadow: inset 0px 0px 5px #121412;
+    transform: translateY(1.2px);
 }
 
 .finalstepstyle {
@@ -97,6 +104,13 @@ body {
     float: right;
     opacity: 0.85;
     border-radius: 10px;
+}
+
+.finalstepstyle:active {
+    background-color: #227e22;
+    -moz-box-shadow: inset 0px 0px 5px rgb(29, 167, 29);
+    box-shadow: inset 0px 0px 5px #292c29;
+    transform: translateY(1.2px);
 }
 
 .cy2buttons {

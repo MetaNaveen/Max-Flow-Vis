@@ -529,6 +529,7 @@ function nextStep() {
         if(currentStep == algoStates.length) {
             document.getElementsByClassName("cy2buttons")[0].style.visibility = "hidden";
             document.getElementById("finalStateMessage").style.visibility = "visible";
+            finalState();
         }
     }
     document.getElementById('algoStateButton').innerHTML = algoStageName;
@@ -807,6 +808,7 @@ function displayInstructions() {
             <li style = "text-align: left">At any stage, the Final State button can be used to skip to the end state</li>
         </ul>`,
       })
+      return;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
