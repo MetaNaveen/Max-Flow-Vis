@@ -40,7 +40,7 @@ body {
 .resetstyle {
     position: absolute;
     left: 8.26%;
-    background-color: rgb(207, 50, 50);
+    background-color: #cf3232;
     border: none;
     color: white;
     z-index: 2000;
@@ -51,6 +51,25 @@ body {
 .resetstyle:active{
     background-color: #913b3b;
     -moz-box-shadow: inset 0px 0px 5px #703e3e;
+    box-shadow: inset 0px 0px 5px #292c29;
+    transform: translateY(1.2px);
+}
+
+.instructionsStyle {
+    position: absolute;
+    right: 50%;
+    background-color: #2a3d6e;
+    border: none;
+    color: white;
+    z-index: 2000;
+    padding: 15px 32px;
+    opacity: 0.85;
+    border-radius: 10px;
+} 
+
+.instructionsStyle:active {
+    background-color: #1f2e53;
+    -moz-box-shadow: inset 0px 0px 5px #292c29;
     box-shadow: inset 0px 0px 5px #292c29;
     transform: translateY(1.2px);
 }

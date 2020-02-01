@@ -787,6 +787,28 @@ function resetGraph() {
     document.getElementById("finalStateMessage").style.visibility = "hidden";
 }
 
+function displayInstructions() {
+    Swal.fire({
+        icon: 'info',
+        title: 'Instructions',
+        html: `
+        <ul>
+            <li style = "text-align: left">Use the left half to define any graph of your choice</li>
+            <li style = "text-align: left">The right half displays the residual graph</li>
+            <li style = "text-align: left">Add nodes by clicking</li>
+            <li style = "text-align: left">Add edges with default capacity by clicking on a source node followed by a target node</li>
+            <li style = "text-align: left">Click on edges to change capacity</li>
+            <li style = "text-align: left">Click on the background to deselect a selected node</li>
+            <li style = "text-align: left">Clicking the Finalize Graph button will prompt you to enter a source and sink</li>
+            <li style = "text-align: left">The clear graph button can be used to start from scratch</li>
+            <li style = "text-align: left">The Show Augmenting Path button animates the current augmenting path in the residual graph</li>
+            <li style = "text-align: left">The Update Flows button adds updates the flows in the original network</li>
+            <li style = "text-align: left">The Update Residual Graph button updates the residual graph for the next iteration</li>
+            <li style = "text-align: left">At any stage, the Final State button can be used to skip to the end state</li>
+        </ul>`,
+      })
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     cy1 = cytoscape({
         container: document.getElementById('cy1'), // container to render in 
@@ -811,5 +833,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cy1.on("vclick", "edge", edgeClick);
 
     cy1.on("dragfree", "node", nodeDrag);
+
+    displayInstructions();
 
 });
